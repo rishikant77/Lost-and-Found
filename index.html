@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lost and Found</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      border: 16px solid #333;
+      border-radius: 50px;
+      background-color: #C0C9EE;
+      position: relative;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .notch {
+      width: 150px;
+      height: 30px;
+      background-color: black;
+      border-radius: 0 0 20px 20px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .screen {
+      padding: 20px;
+      padding-top: 40px;
+      height: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      background-color: #C0C9EE;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+    }
+
+    .menu-icon {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .item-card {
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+    }
+
+    .item-info {
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .item-info strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .btn {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 12px 0;
+      font-size: 14px;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-green {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .btn-white {
+      background-color: white;
+      color: black;
+    }
+
+    .sidebar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #C0C9EE; /* MATCH frame color */
+      padding-top: 60px;
+      box-sizing: border-box;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 15;
+      border-radius: 20px 0 0 20px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px 25px;
+      border-bottom: 1px solid #aaa; /* lighter line for light bg */
+    }
+
+    .sidebar ul li a {
+      color: rgb(245, 243, 243);
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+    }
+
+    /* Disable text color change and add subtle hover bg */
+    .sidebar ul li:hover {
+      /* background-color: rgba(255, 255, 255, 0.1); */
+      background-color: black;
+      color: white;
+      
+    }
+
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 14;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Image modal inside phone-frame */
+    .image-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .image-modal.active {
+      display: flex;
+    }
+
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="notch"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <ul>
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="report-lost.html">📤 Report Lost</a></li>
+        <li><a href="report-found.html">📥 Report Found</a></li>
+        <li><a href="track-status.html">🔍 Track Report</a></li>
+        <li><a href="login.html">🗝️ Login Page</a></li>
+      </ul>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Screen -->
+    <div class="screen">
+      <div class="header">
+        <img src="Logo1.png" alt="Logo" class="logo" />
+        <div class="menu-icon" id="menu-icon">&#9776;</div>
+      </div>
+
+      <!-- Item Cards -->
+      <div class="item-card">
+        <img src="chargers.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>chargers</strong>
+          Location: Lab-01 Mander
+        </div>
+      </div>
+
+      <div class="item-card">
+        <img src="keys.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Keys</strong>
+          Location: Basketball court
+        </div>
+      </div>
+
+      <div class="item-card">
+        <img src="book.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Book:Hands On Machine Learning</strong>
+          Location: Library Desk
+        </div>
+      </div>
+
+      <div class="item-card">
+        <img src="ear-buds.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Ear Buds</strong>
+          Location: Sr02 Bilston
+        </div>
+      </div>
+      <div class="item-card">
+        <img src="art-supplies.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Art Supplies</strong>
+          Location: Student Lounge
+        </div>
+      </div>
+      <div class="item-card">
+        <img src="water-bottle.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Water Bottle</strong>
+          Location: Canteen
+        </div>
+      </div>
+      <div class="item-card">
+        <img src="camera.jpg" alt="Lost Item" class="zoomable" />
+        <div class="item-info">
+          <strong>Camera</strong>
+          Location: Library
+        </div>
+      </div>
+
+      <button class="btn btn-green">Report lost item</button>
+      <button class="btn btn-white">Report found item</button>
+    </div>
+
+    <!-- Image Zoom Modal inside phone -->
+    <div class="image-modal" id="imageModal">
+      <span class="image-modal-close" id="modalClose">&times;</span>
+      <img src="" id="modalImage" alt="Zoomed Image" />
+    </div>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    const menuIcon = document.getElementById('menu-icon');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuIcon.addEventListener('click', () => {
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+
+    // Zoom image modal
+    const zoomableImages = document.querySelectorAll('.zoomable');
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalClose = document.getElementById('modalClose');
+
+    zoomableImages.forEach(img => {
+      img.addEventListener('click', () => {
+        modalImg.src = img.src;
+        modal.classList.add('active');
+      });
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

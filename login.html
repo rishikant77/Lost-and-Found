@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      border: 16px solid #333;
+      border-radius: 50px;
+      /* background-color: #756cb3; */
+      background-color: #C0C9EE;
+      position: relative;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .notch {
+      width: 150px;
+      height: 30px;
+      background-color: black;
+      border-radius: 0 0 20px 20px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    .login-screen {
+      padding: 40px 25px;
+      text-align: center;
+      position: relative;
+      height: 100%;
+      box-sizing: border-box;
+      color: black;
+    }
+
+    .logo {
+      width: 70px;
+      margin-top: 80px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      margin: 12px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: #45a049;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="notch"></div>
+    <div class="login-screen">
+      <img src="Logo1.png" alt="Logo" class="logo" />
+      <h2>Login</h2>
+
+      <form>
+        <input type="email" placeholder="Email Address" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+
+      <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+  </div>
+</body>
+</html>
