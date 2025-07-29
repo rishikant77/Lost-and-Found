@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Lost and Found</title>
+    <link rel="icon" type="image/x-icon" href="favicon-32x32.png" />
+
   <style>
     body {
       margin: 0;
@@ -73,11 +75,70 @@
       cursor: pointer;
     }
 
+    /* Intro text container */
+    .intro-text {
+      text-align: center;
+      margin-bottom: 30px;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    .intro-text.fade-out {
+      animation: fadeOut 0.6s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .main-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .subtext {
+      font-size: 16px;
+      color: #444;
+      margin-top: 10px;
+    }
+
+    /* Lost Items title */
+    #lostItemsTitle {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #222;
+      display: none;
+    }
+
+    /* Item list container - initially hidden */
+    #itemList {
+      display: none;
+    }
+
     .item-card {
       background-color: white;
       border-radius: 10px;
       margin-bottom: 20px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .item-card img {
@@ -109,13 +170,14 @@
       font-size: 14px;
       text-align: center;
       border-radius: 8px;
-      border: none;
       cursor: pointer;
-    }
-
-    .btn-green {
-      background-color: #4CAF50;
+      border: none;
+      box-sizing: border-box;
+      background-color: #4CAF50; /* default green */
       color: white;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      position: relative;
     }
 
     .btn-white {
@@ -123,6 +185,31 @@
       color: black;
     }
 
+    .btn-green:hover {
+      background-color: #45a049;
+    }
+
+    .btn-white:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Remove underline on <a> inside buttons */
+    .btn a {
+      color: inherit;           /* inherit button text color */
+      text-decoration: none;    /* remove underline */
+      display: block;           /* fill entire button */
+      width: 100%;
+      height: 100%;
+      line-height: normal;
+      padding: 0;
+      margin: 0;
+    }
+
+    .btn a:hover {
+      text-decoration: none;
+    }
+
+    /* Sidebar and overlay styles */
     .sidebar {
       position: absolute;
       top: 0;
@@ -157,7 +244,7 @@
 
     .sidebar ul li {
       padding: 15px 25px;
-      border-bottom: 1px solid #aaa; /* lighter line for light bg */
+      border-bottom: 1px solid #aaa;
     }
 
     .sidebar ul li a {
@@ -167,14 +254,10 @@
       display: block;
     }
 
-    /* Disable text color change and add subtle hover bg */
     .sidebar ul li:hover {
-      /* background-color: rgba(255, 255, 255, 0.1); */
       background-color: black;
       color: white;
-      
     }
-
 
     .overlay {
       position: absolute;
@@ -194,7 +277,6 @@
       pointer-events: auto;
     }
 
-    /* Image modal inside phone-frame */
     .image-modal {
       position: absolute;
       top: 0;
@@ -256,62 +338,84 @@
         <div class="menu-icon" id="menu-icon">&#9776;</div>
       </div>
 
-      <!-- Item Cards -->
-      <div class="item-card">
-        <img src="chargers.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>chargers</strong>
-          Location: Lab-01 Mander
+      <!-- Intro Text -->
+      <div class="intro-text" id="introText">
+        <div class="main-text">
+          Find What’s Missing.<br>
+          Return What’s Found.
+        </div>
+        <div class="subtext">
+          A smarter way to<br>
+          reconnect people<br>
+          with their missing<br>
+          belongings.
         </div>
       </div>
 
-      <div class="item-card">
-        <img src="keys.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Keys</strong>
-          Location: Basketball court
-        </div>
-      </div>
+      <!-- Lost Items Title -->
+      <div id="lostItemsTitle">Lost Items</div>
 
-      <div class="item-card">
-        <img src="book.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Book:Hands On Machine Learning</strong>
-          Location: Library Desk
+      <!-- Item Cards Container -->
+      <div id="itemList">
+        <div class="item-card">
+          <img src="chargers.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>chargers</strong>
+            Location: Lab-01 Mander
+          </div>
         </div>
-      </div>
 
-      <div class="item-card">
-        <img src="ear-buds.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Ear Buds</strong>
-          Location: Sr02 Bilston
+        <div class="item-card">
+          <img src="keys.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Keys</strong>
+            Location: Basketball court
+          </div>
         </div>
-      </div>
-      <div class="item-card">
-        <img src="art-supplies.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Art Supplies</strong>
-          Location: Student Lounge
-        </div>
-      </div>
-      <div class="item-card">
-        <img src="water-bottle.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Water Bottle</strong>
-          Location: Canteen
-        </div>
-      </div>
-      <div class="item-card">
-        <img src="camera.jpg" alt="Lost Item" class="zoomable" />
-        <div class="item-info">
-          <strong>Camera</strong>
-          Location: Library
-        </div>
-      </div>
 
-      <button class="btn btn-green">Report lost item</button>
-      <button class="btn btn-white">Report found item</button>
+        <div class="item-card">
+          <img src="book.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Book:Hands On Machine Learning</strong>
+            Location: Library Desk
+          </div>
+        </div>
+
+        <div class="item-card">
+          <img src="ear-buds.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Ear Buds</strong>
+            Location: Sr02 Bilston
+          </div>
+        </div>
+
+        <div class="item-card">
+          <img src="art-supplies.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Art Supplies</strong>
+            Location: Student Lounge
+          </div>
+        </div>
+
+        <div class="item-card">
+          <img src="water-bottle.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Water Bottle</strong>
+            Location: Canteen
+          </div>
+        </div>
+
+        <div class="item-card">
+          <img src="camera.jpg" alt="Lost Item" class="zoomable" />
+          <div class="item-info">
+            <strong>Camera</strong>
+            Location: Library
+          </div>
+        </div>
+
+        <button class="btn btn-green"><a href="report-lost.html">Report lost item</a></button>
+        <button class="btn btn-white"><a href="report-found.html">Report found item</a></button>
+      </div>
     </div>
 
     <!-- Image Zoom Modal inside phone -->
@@ -358,6 +462,35 @@
       if (e.target === modal) {
         modal.classList.remove('active');
       }
+    });
+
+    // Animation for intro text and item cards after page load
+    window.addEventListener("load", () => {
+      const intro = document.getElementById('introText');
+      const itemList = document.getElementById('itemList');
+      const lostItemsTitle = document.getElementById('lostItemsTitle');
+
+      // Show intro text immediately
+      intro.style.display = 'block';
+
+      // After 2 seconds, fade out intro text
+      setTimeout(() => {
+        intro.classList.add('fade-out');
+
+        // After fade out animation ends (~600ms), hide intro and show list + title
+        intro.addEventListener('animationend', () => {
+          intro.style.display = 'none';
+          lostItemsTitle.style.display = 'block';
+          itemList.style.display = 'block';
+
+          const items = itemList.querySelectorAll('.item-card');
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('fade-in');
+            }, index * 150);
+          });
+        }, { once: true });
+      }, 2000);
     });
   </script>
 </body>
